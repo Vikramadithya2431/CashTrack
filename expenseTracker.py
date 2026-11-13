@@ -1,47 +1,17 @@
 import calendar
 import datetime
-
 from expense import Expense
 
-def main():
-    print("Welcome to CashTrack!")
-    expense_file_path = "expenses.csv"
-    budget = float(input("Enter your monthly budget: "))
+budget = 0.0
 
-    #Get user input for expense details
-    expense = get_user_expense()
-    print(expense)
-
-    #Write their expense to a file
-    save_expense_to_file(expense, expense_file_path)
-
-    #Read file and summarize expenses
-    summarize_expenses(expense_file_path, budget)
-
-
-def get_user_expense():
-    expense_name = input("Enter the name of the expense: ")
-    expense_amount = float(input("Enter the amount of the expense: "))
-
-    expense_categories = ["Food", "Transportation", "Entertainment", "Home", "Misc"]
-    while True:
-        print("Select a category for the expense:")
-        for i, cat in enumerate(expense_categories):
-            print(f"  {i + 1}. {cat}")
-        cat_choice = input("Enter the number of the category: ")
-        if cat_choice.isdigit() and 1 <= int(cat_choice) <= len(expense_categories):
-            selected_expense_category = expense_categories[int(cat_choice) - 1]
-            new_expense = Expense(
-                expense_name, expense_amount, selected_expense_category
-            )
-            return new_expense
-    
-        else:
-            print("Invalid choice. Please try again.")
+def get_user_expense(expense_name, expense_amount, cat_choice):
+    new_expense = Expense(
+        expense_name, expense_amount, cat_choice
+    )
+    return new_expense
 
 
 def save_expense_to_file(expense, expense_file_path):
-    print(f"Saving {expense} to {expense_file_path}")
     with open(expense_file_path, "a") as f:
         f.write(f"{expense.name},{expense.category},{expense.amount}\n")
 
@@ -79,7 +49,4 @@ def summarize_expenses(expense_file_path, budget):
     remaining_days = days_in_month - now.day
     daily_budget = remaining_budget / remaining_days if remaining_days > 0 else 0
     print(f"Daily budget: ${daily_budget:.2f}")
-
-
-if __name__ == "__main__":
-    main()
+    
